@@ -248,7 +248,7 @@ impl Character {
 }
 
 fn main() {
-    let file_path = "./data/fr/t1.1.csv"; // Chemin vers le fichier CSV
+    let file_path = "./data/lvl0_char_gen/fr/t1.1.csv"; // Chemin vers le fichier CSV
     let attributes = [
         "Force",
         "Agilité",
@@ -324,7 +324,7 @@ fn main() {
     let pv = roll_hp(endurance_bonus);
     println!("Points de vie (PV) : {}", pv);
 
-    let augure_path = "./data/fr/t1.2.csv";
+    let augure_path = "./data/lvl0_char_gen/fr/t1.2.csv";
     let chance_bonus = results[5].1; // "Chance" est le 6e attribut
     let augure_bonus = if chance_bonus > 1 { chance_bonus } else { 1 };
 
@@ -350,7 +350,7 @@ fn main() {
             (0, String::new(), String::new(), Vec::new())
         };
 
-    let metier_path = "./data/fr/t1.3.csv";
+    let metier_path = "./data/lvl0_char_gen/fr/t1.3.csv";
 
     let (metier, arme, equipement) = if let Some((metier, arme, equip)) = get_metier(metier_path) {
         println!(
@@ -365,7 +365,7 @@ fn main() {
 
     let mvt = calc_mvt(&metier);
 
-    let equip_rand_path = "./data/fr/t3.3.csv";
+    let equip_rand_path = "./data/lvl0_char_gen/fr/t3.3.csv";
     let equipement_supp = if let Some(equipement) = get_equipement_aleatoire(equip_rand_path) {
         println!("Équipement supplémentaire : {}", equipement);
         equipement
@@ -432,7 +432,7 @@ fn main() {
         character.deg_cac,
         character.deg_dis,
         character.deg_0,
-        "./data/fr/t3.1.csv",
+        "./data/lvl0_char_gen/fr/t3.1.csv",
     )
     .unwrap_or_else(|| "Inconnu".to_string());
 
@@ -454,10 +454,11 @@ fn main() {
     println!("{:#?}", character);
 
     let json = serde_json::to_string_pretty(&character).expect("Erreur de sérialisation JSON");
-    let mut file = File::create("personnage.json").expect("Impossible de créer le fichier JSON");
+    let mut file =
+        File::create("output/personnage.json").expect("Impossible de créer le fichier JSON");
     file.write_all(json.as_bytes())
         .expect("Erreur d'écriture JSON");
-    println!("Personnage sauvegardé dans personnage.json");
+    println!("Personnage sauvegardé dans output/personnage.json");
 }
 
 #[cfg(test)]
