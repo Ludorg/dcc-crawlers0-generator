@@ -79,9 +79,9 @@ fn get_metier<P: AsRef<Path>>(file_path: P) -> Option<(String, String, String)> 
     let file = File::open(file_path).ok()?;
     let reader = BufReader::new(file);
     let re = Regex::new(r"^(\d+)(?:-(\d+))?").unwrap();
+    println!("Métier numéro : {roll}");
 
     for line in reader.lines().flatten() {
-        //if let Ok(line) = line {
         let parts: Vec<&str> = line.split(';').map(|s| s.trim()).collect();
         if parts.len() >= 4
             && let Some(cap) = re.captures(parts[0])
@@ -99,7 +99,6 @@ fn get_metier<P: AsRef<Path>>(file_path: P) -> Option<(String, String, String)> 
                 ));
             }
         }
-        //}
     }
     None
 }
@@ -350,7 +349,8 @@ fn main() {
             (0, String::new(), String::new(), Vec::new())
         };
 
-    let metier_path = "./data/lvl0_char_gen/fr/t1.3.csv";
+    // let metier_path = "./data/lvl0_char_gen/fr/t1.3.csv";
+    let metier_path = "data/lvl0_char_gen/fr/dans_les_glaces_du_temps/appendix.a.csv";
 
     let (metier, arme, equipement) = if let Some((metier, arme, equip)) = get_metier(metier_path) {
         println!(
