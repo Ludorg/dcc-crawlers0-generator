@@ -1,0 +1,16 @@
+3 ; -3 ; -3 ; Impossible de lancer des sorts ; Impossible de lancer des sorts ; 
+4 ; -2 ; -2 ; -2 sorts* ; 1 ; 
+5 ; -2 ; -2 ; -2 sorts* ; 1 ; 
+6 ; -1 ; -1 ; -1 sort* ; 1 ; 
+7 ; -1 ; -1 ; -1 sort* ; 1 ; 
+8 ; -1 ; -1 ; Pas d'ajustement ; 2 ; 
+9 ; 0 ; Aucun ; Pas d'ajustement ; 2 ; 
+10 ; 0 ; Aucun ; Pas d'ajustement ; 3 ; 
+11 ; 0 ; Aucun ; Pas d'ajustement ; 3 ; 
+12 ; 0 ; Aucun ; Pas d'ajustement ; 4 ; 
+13 ; +1 ; +1 ; Pas d'ajustement ; 4 ; 
+14 ; +1 ; +1 ; +1 sort ; 4 ; 
+15 ; +1 ; +1 ; +1 sort ; 5 ; 
+16 ; +2 ; +2 ; +1 sort ; 5 ; 
+17 ; +2 ; +2 ; +2 sorts ; 5 ; 
+18 ; +3 ; +3 ; +2 sorts ; 5 ;
