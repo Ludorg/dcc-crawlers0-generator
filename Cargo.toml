@@ -1,0 +1,5 @@
+[workspace]
+resolver = "2"
+members = [
+    "lvl0_char_gen"
+]
