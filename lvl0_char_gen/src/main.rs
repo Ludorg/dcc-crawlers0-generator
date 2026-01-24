@@ -6,8 +6,8 @@ use std::io::{BufRead, BufReader, Write};
 use std::path::Path;
 
 fn roll_dice(sides: u8, count: u8, modifier: u8) -> u8 {
-    let mut rng = rand::thread_rng();
-    (0..count).map(|_| rng.gen_range(1..=sides)).sum::<u8>() + modifier
+    let mut rng = rand::rng();
+    (0..count).map(|_| rng.random_range(1..=sides)).sum::<u8>() + modifier
 }
 
 /// Récupère une entrée d'attribut à partir d'un fichier CSV (t1.1.csv)
@@ -18,19 +18,20 @@ fn get_attribute_data<P: AsRef<Path>>(
     let file = File::open(file_path).ok()?;
     let reader = BufReader::new(file);
 
-    for line in reader.lines().flatten() {
+    for line in reader.lines().map_while(Result::ok) {
         let parts: Vec<&str> = line.split(';').map(|s| s.trim()).collect();
         if parts.len() >= 5
             && let (Ok(v1), Ok(v2)) = (parts[0].parse::<i32>(), parts[1].parse::<i32>())
-                && v1 == target_value {
-                    return Some((
-                        v1,
-                        v2,
-                        parts[2].to_string(),
-                        parts[3].to_string(),
-                        parts[4].to_string(),
-                    ));
-                }
+            && v1 == target_value
+        {
+            return Some((
+                v1,
+                v2,
+                parts[2].to_string(),
+                parts[3].to_string(),
+                parts[4].to_string(),
+            ));
+        }
     }
     None
 }
@@ -50,23 +51,24 @@ fn get_augure_naissance<P: AsRef<Path>>(
     let file = File::open(file_path).ok()?;
     let reader = BufReader::new(file);
 
-    for line in reader.lines().flatten() {
+    for line in reader.lines().map_while(Result::ok) {
         let parts: Vec<&str> = line.split(';').map(|s| s.trim()).collect();
         if parts.len() >= 3
             && let Ok(num) = parts[0].parse::<i32>()
-                && num == roll {
-                    let attributs_cibles = if parts.len() >= 4 && !parts[3].is_empty() {
-                        parts[3].split('|').map(|s| s.trim().to_string()).collect()
-                    } else {
-                        Vec::new()
-                    };
-                    return Some((
-                        num,
-                        parts[1].to_string(),
-                        parts[2].to_string(),
-                        attributs_cibles,
-                    ));
-                }
+            && num == roll
+        {
+            let attributs_cibles = if parts.len() >= 4 && !parts[3].is_empty() {
+                parts[3].split('|').map(|s| s.trim().to_string()).collect()
+            } else {
+                Vec::new()
+            };
+            return Some((
+                num,
+                parts[1].to_string(),
+                parts[2].to_string(),
+                attributs_cibles,
+            ));
+        }
     }
     None
 }
@@ -78,25 +80,26 @@ fn get_metier<P: AsRef<Path>>(file_path: P) -> Option<(String, String, String)> 
     let reader = BufReader::new(file);
     let re = Regex::new(r"^(\d+)(?:-(\d+))?").unwrap();
 
-    for line in reader.lines() {
-        if let Ok(line) = line {
-            let parts: Vec<&str> = line.split(';').map(|s| s.trim()).collect();
-            if parts.len() >= 4
-                && let Some(cap) = re.captures(parts[0]) {
-                    let min: i32 = cap[1].parse().ok()?;
-                    let max: i32 = cap
-                        .get(2)
-                        .and_then(|m| m.as_str().parse::<i32>().ok())
-                        .unwrap_or(min);
-                    if roll >= min && roll <= max {
-                        return Some((
-                            parts[1].to_string(), // Métier
-                            parts[2].to_string(), // Arme
-                            parts[3].to_string(), // Équipement
-                        ));
-                    }
-                }
+    for line in reader.lines().flatten() {
+        //if let Ok(line) = line {
+        let parts: Vec<&str> = line.split(';').map(|s| s.trim()).collect();
+        if parts.len() >= 4
+            && let Some(cap) = re.captures(parts[0])
+        {
+            let min: i32 = cap[1].parse().ok()?;
+            let max: i32 = cap
+                .get(2)
+                .and_then(|m| m.as_str().parse::<i32>().ok())
+                .unwrap_or(min);
+            if roll >= min && roll <= max {
+                return Some((
+                    parts[1].to_string(), // Métier
+                    parts[2].to_string(), // Arme
+                    parts[3].to_string(), // Équipement
+                ));
+            }
         }
+        //}
     }
     None
 }
@@ -107,13 +110,14 @@ fn get_equipement_aleatoire<P: AsRef<Path>>(file_path: P) -> Option<String> {
     let file = File::open(file_path).ok()?;
     let reader = BufReader::new(file);
 
-    for line in reader.lines().flatten() {
+    for line in reader.lines().map_while(Result::ok) {
         let parts: Vec<&str> = line.split(';').map(|s| s.trim()).collect();
         if parts.len() >= 2
             && let Ok(num) = parts[0].parse::<i32>()
-                && num == roll {
-                    return Some(parts[1].to_string());
-                }
+            && num == roll
+        {
+            return Some(parts[1].to_string());
+        }
     }
     None
 }
@@ -151,12 +155,13 @@ fn calculer_degats_arme<P: AsRef<std::path::Path>>(
     // Gère les cas "Perche (comme bâton)"
     let mut nom_arme = arme.trim();
     if let Some(start) = nom_arme.find("(comme ")
-        && let Some(end) = nom_arme[start..].find(')') {
-            let vrai_nom = &nom_arme[start + 7..start + end];
-            nom_arme = vrai_nom.trim();
-        }
+        && let Some(end) = nom_arme[start..].find(')')
+    {
+        let vrai_nom = &nom_arme[start + 7..start + end];
+        nom_arme = vrai_nom.trim();
+    }
 
-    for line in reader.lines().skip(1).flatten() {
+    for line in reader.lines().skip(1).map_while(Result::ok) {
         let parts: Vec<&str> = line.split(';').map(|s| s.trim()).collect();
         if parts.len() >= 4 && parts[0].eq_ignore_ascii_case(nom_arme) {
             let degats = parts[1];
