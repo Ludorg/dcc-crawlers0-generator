@@ -1,5 +1,6 @@
 [workspace]
 resolver = "2"
 members = [
+    "sheet_gen/",
     "lvl0_char_gen"
 ]
