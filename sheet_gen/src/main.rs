@@ -116,7 +116,7 @@ fn main() {
             &character.pv.to_string(),
         );
     }
-    for (_i, (nom, bonus, val)) in character.attributes.iter().enumerate() {
+    for (nom, bonus, val) in character.attributes.iter() {
         if let Some(&(x, y)) = coords.get(&format!("attributes[{}].1", nom)) {
             draw_text_mut(&mut img, black, x, y, scale, &font, &format_bonus(*bonus));
         }
@@ -125,26 +125,10 @@ fn main() {
         }
     }
     if let Some(&(x, y)) = coords.get("arme") {
-        draw_text_mut(
-            &mut img,
-            black,
-            x,
-            y,
-            scale,
-            &font,
-            &format!("{}", &character.arme),
-        );
+        draw_text_mut(&mut img, black, x, y, scale, &font, &character.arme);
     }
     if let Some(&(x, y)) = coords.get("degats_arme") {
-        draw_text_mut(
-            &mut img,
-            black,
-            x,
-            y,
-            scale,
-            &font,
-            &format!("{}", &character.degats_arme),
-        );
+        draw_text_mut(&mut img, black, x, y, scale, &font, &character.degats_arme);
     }
 
     if let Some(&(x, y)) = coords.get("equipement") {
