@@ -2,7 +2,7 @@
 
 cargo build --release
 
-for i in {00..20}
+for i in {00..40}
 do
     ./target/release/lvl0_char_gen 
     ./target/release/sheet_gen

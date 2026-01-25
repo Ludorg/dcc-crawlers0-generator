@@ -77,7 +77,8 @@ fn format_bonus(bonus: i32) -> String {
 
 fn main() {
     // Charge la fiche PNG vierge
-    let mut img = image::open("./data/sheet_gen/fr/DCC_Fiche_Niv0.png")
+    //let mut img = image::open("./data/sheet_gen/fr/DCC_Fiche_Niv0.png")
+    let mut img = image::open("data/sheet_gen/fr/frozen-in-time/fiche-frozen-in-time-vierge-1.png")
         .expect("DCC_Fiche_Niv0.png manquante")
         .to_rgba8();
 
@@ -85,7 +86,8 @@ fn main() {
     let font_data =
         std::fs::read("./data/sheet_gen/assets/DejaVuSans.ttf").expect("Police manquante");
     let font = Font::try_from_vec(font_data).unwrap();
-    let scale = Scale { x: 28.0, y: 28.0 }; // 40 pour fr/hyper-cube-of-myt
+    let scale = Scale { x: 40.0, y: 40.0 }; // 40 pour fr/hyper-cube-of-myt
+    let scale_big = Scale { x: 54.0, y: 54.0 }; // 40 pour fr/hyper-cube-of-myt
 
     // Charge le personnage
     let file = File::open("output/personnage.json").unwrap();
@@ -94,7 +96,7 @@ fn main() {
     println!("{:?}", character);
 
     // Charge les coordonnées
-    let coords = load_coordinates("./data/sheet_gen/fr/char_sheet_coord.txt");
+    let coords = load_coordinates("./data/sheet_gen/fr/frozen-in-time/char_sheet_coord.txt");
     if coords.is_empty() {
         panic!("Le fichier char_sheet_coord.txt est vide ou manquant");
     }
@@ -103,7 +105,7 @@ fn main() {
 
     // Remplis les champs
     if let Some(&(x, y)) = coords.get("metier") {
-        draw_text_mut(&mut img, black, x, y, scale, &font, &character.metier);
+        draw_text_mut(&mut img, black, x, y, scale_big, &font, &character.metier);
     }
     if let Some(&(x, y)) = coords.get("pv") {
         draw_text_mut(
@@ -121,7 +123,7 @@ fn main() {
             draw_text_mut(&mut img, black, x, y, scale, &font, &format_bonus(*bonus));
         }
         if let Some(&(x, y)) = coords.get(&format!("attributes[{}].2", nom)) {
-            draw_text_mut(&mut img, black, x, y, scale, &font, &val.to_string());
+            draw_text_mut(&mut img, black, x, y, scale_big, &font, &val.to_string());
         }
     }
     if let Some(&(x, y)) = coords.get("arme") {
@@ -193,7 +195,7 @@ fn main() {
             black,
             x,
             y,
-            scale,
+            scale_big,
             &font,
             &character.armor_class.to_string(),
         );
@@ -205,7 +207,7 @@ fn main() {
             black,
             x,
             y,
-            scale,
+            scale_big,
             &font,
             &format_bonus(character.js_ref),
         );
@@ -216,7 +218,7 @@ fn main() {
             black,
             x,
             y,
-            scale,
+            scale_big,
             &font,
             &format_bonus(character.js_vig),
         );
@@ -227,7 +229,7 @@ fn main() {
             black,
             x,
             y,
-            scale,
+            scale_big,
             &font,
             &format_bonus(character.js_vol),
         );
@@ -239,7 +241,7 @@ fn main() {
             black,
             x,
             y,
-            scale,
+            scale_big,
             &font,
             &format_bonus(character.atk_cac),
         );
@@ -250,7 +252,7 @@ fn main() {
             black,
             x,
             y,
-            scale,
+            scale_big,
             &font,
             &format_bonus(character.atk_dis),
         );
@@ -261,7 +263,7 @@ fn main() {
             black,
             x,
             y,
-            scale,
+            scale_big,
             &font,
             &format_bonus(character.deg_cac),
         );
@@ -272,7 +274,7 @@ fn main() {
             black,
             x,
             y,
-            scale,
+            scale_big,
             &font,
             &format_bonus(character.deg_dis),
         );
@@ -284,7 +286,7 @@ fn main() {
             black,
             x,
             y,
-            scale,
+            scale_big,
             &font,
             &format_bonus(character.init),
         );

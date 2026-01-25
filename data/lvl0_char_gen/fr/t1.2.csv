@@ -6,25 +6,25 @@
 6 ; Né sur le champ de bataille ; Jets de dégâts ; deg_cac|deg_dis
 7 ; Voie de l’ours ; Jets de dégâts au corps-à-corps ; deg_cac
 8 ; Œil de faucon ; Jets de dégâts à distance ; deg_dis
-9 ; Chasseur en meute ; Jets d’attaque et dégâts avec arme niveau 0 ; deg_0
-10 ; Né dans l’atelier ; Tests de compétence (y compris celles de voleur) ; 
+9 ; Chasseur en meute ; Jets (att. et dég.) avec arme niveau 0 ; deg_0
+10 ; Né dans l’atelier ; Tests de compétence ; 
 11 ; Ruse du renard ; Détecter/désamorcer les pièges ; 
 12 ; Trèfle à quatre feuilles ; Trouver les passages secrets ; 
 13 ; Septième fils ; Tests d’incantation ; 
 14 ; La tempête déchaînée ; Dégâts des sorts ; 
 15 ; Cœur vertueux ; Test pour Repousser les impies ; 
-16 ; Survivant de la peste ; Soins magiques* ; 
+16 ; Survivant de la peste ; Soins magiques ; 
 17 ; Bon présage ; Jets de sauvegarde ; js_ref|js_vig|js_vol
 18 ; Ange gardien ; Jets de sauvegarde pour échapper aux pièges ; 
-19 ; Mordu par une araignée ; Jets de sauvegarde contre le poison ; 
+19 ; Mordu par une araignée ; JS contre le poison ; 
 20 ; Frappé par la foudre ; Jets de sauvegarde de Réflexes ; js_ref
 21 ; Survivant d’une famine ; Jets de sauvegarde de Vigueur ; js_vig
 22 ; A résisté à la tentation ; Jets de sauvegarde de Volonté ; js_vol
 23 ; Maison protégée ; Classe d’Armure ; armor_class
 24 ; Vitesse du cobra ; Initiative ; init
-25 ; Récolte abondante ; Points de vie (s’applique à chaque niveau) ; pv
-26 ; Bras du guerrier ; Tables de coups critiques** ; 
+25 ; Récolte abondante ; Points de vie ; pv
+26 ; Bras du guerrier ; Tables de coups critiques; 
 27 ; Demeure maudite ; Jets de corruption ; 
-28 ; L’étoile brisée ; Maladresses** ; 
+28 ; L’étoile brisée ; Maladresses ; 
 29 ; Chant d’oiseau ; Nombre de langues ; nb_lang
-30 ; Enfant sauvage ; Vitesse (chaque +1 = mouvement +1,5 m) ; mvt
+30 ; Enfant sauvage ; Vitesse de mouvement ; mvt
