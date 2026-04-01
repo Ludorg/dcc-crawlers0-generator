@@ -8,4 +8,5 @@ do
     ./target/release/sheet_gen
     cp output/personnage.json output/personnage_$i.json
     cp output/fiche_personnage.png output/fiche_personnage_$i.png
+    ./target/release/import_foundry_gen output/personnage_$i.json > output/import_foundry_$i.txt
 done

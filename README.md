@@ -3,22 +3,24 @@
 [![Bluesky](https://img.shields.io/badge/Bluesky-@ludorg.bsky.social-0096FF?logo=bluesky&logoColor=white)](https://bsky.app/profile/ludorg.bsky.social) [![License](https://img.shields.io/github/license/ludorg/dcc-crawlers0-generator)](LICENSE) [![Language: Rust](https://img.shields.io/badge/language-Rust-121011?logo=rust&logoColor=white)](https://www.rust-lang.org)
 
 Générateur de personnages "zero-level" pour Dungeon Crawl Classics (DCC). Ce dépôt fournit
-deux utilitaires Rust : l'un pour générer les données de personnage (`lvl0_char_gen`) et l'autre
-pour rendre des fiches imprimables à partir de templates (`sheet_gen`). Le contenu est fourni en
-français et conçu pour être facilement personnalisable.
+trois utilitaires Rust : le premier pour générer les données de personnage (`lvl0_char_gen`), le second
+pour rendre des fiches imprimables à partir de templates (`sheet_gen`), et le troisième
+pour convertir les JSON en format d'import pour FoundryVTT (`import_foundry_gen`). Le contenu est fourni en français et conçu pour être facilement personnalisable.
 
 ## Description
 
-Pipeline en deux étapes :
+Pipeline en trois étapes :
 
 1. `lvl0_char_gen` génère des fichiers JSON décrivant un personnage zero-level.
 2. `sheet_gen` remplit une image-template en positionnant les textes selon un fichier de
    coordonnées pour produire une fiche PNG prête à l'impression.
+3. `import_foundry_gen` convertit les JSON en format d'import pour FoundryVTT.
 
 ## Fonctionnalités
 
 - Génération de personnages zero-level en JSON.
 - Rendu de fiches PNG à partir de templates et d'un fichier de coordonnées.
+- Conversion des JSON en format d'import pour FoundryVTT.
 - Assets et templates organisés sous `data/` pour faciliter la personnalisation.
 - Exemple de configuration TOML et fichier de coordonnées inclus.
 - Script `run.sh` pour exécuter le pipeline rapidement.
@@ -63,13 +65,20 @@ cargo run --release
 # par défaut lit output/personnage.json et écrit output/fiche_personnage.png
 ```
 
+Générer un fichier d'import FoundryVTT :
+
+```sh
+cd ../import_foundry_gen
+cargo run --release output/personnage.json > output/import_foundry.txt
+```
+
 Lancer le pipeline complet :
 
 ```sh
 ./run.sh
 ```
 
-Utilisation avancée (avec config TOML) :
+### Utilisation avancée (avec config TOML) :
 
 ```sh
 # sheet_gen accepte maintenant un chemin de config TOML en premier argument
@@ -80,6 +89,7 @@ cargo run --bin sheet_gen -- data/sheet_gen/config_example.toml
 
 - `lvl0_char_gen/` : génération des données JSON
 - `sheet_gen/` : rendu des fiches depuis les JSON
+- `import_foundry_gen/` : utilitaire pour convertir les JSON en format d'import FoundryVTT
 - `data/` : assets, templates et exemples de config
 - `run.sh` : script pour lancer le pipeline
 - `Cargo.toml` : workspace
