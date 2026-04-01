@@ -1,0 +1,10 @@
+# Exemple de configuration pour sheet_gen
+input_json = "output/personnage.json"
+template_png = "data/sheet_gen/fr/frozen-in-time/fiche-frozen-in-time-vierge-1.png"
+font = "data/sheet_gen/assets/DejaVuSans.ttf"
+coords = "data/sheet_gen/fr/frozen-in-time/char_sheet_coord.txt"
+output_png = "output/fiche_personnage.png"
+
+# Options supplémentaires (exemple)
+# scale = 1.0
+# color = "black"

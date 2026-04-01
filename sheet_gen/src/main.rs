@@ -3,6 +3,8 @@ use imageproc::drawing::draw_text_mut;
 use rusttype::{Font, Scale};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::env;
+use std::fs;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
@@ -76,27 +78,84 @@ fn format_bonus(bonus: i32) -> String {
 }
 
 fn main() {
+    // Lecture d'une configuration TOML optionnelle passée en premier argument
+    let args: Vec<String> = env::args().collect();
+    #[derive(Debug, Deserialize)]
+    struct Config {
+        input_json: Option<String>,
+        template_png: Option<String>,
+        font: Option<String>,
+        coords: Option<String>,
+        output_png: Option<String>,
+    }
+
+    let mut cfg = Config {
+        input_json: None,
+        template_png: None,
+        font: None,
+        coords: None,
+        output_png: None,
+    };
+
+    if args.len() > 1 {
+        let conf_path = &args[1];
+        if let Ok(content) = fs::read_to_string(conf_path) {
+            if let Ok(parsed) = toml::from_str::<Config>(&content) {
+                cfg = parsed;
+            } else {
+                eprintln!("Impossible de parser la configuration TOML : {}", conf_path);
+            }
+        } else {
+            eprintln!("Fichier de configuration introuvable : {}", conf_path);
+        }
+    }
+
+    // Chemins par défaut (utilisés si non fournis par la config)
+    let input_json = cfg
+        .input_json
+        .as_deref()
+        .unwrap_or("output/personnage.json");
+
+    let template_png = cfg
+        .template_png
+        .as_deref()
+        .unwrap_or("data/sheet_gen/fr/frozen-in-time/fiche-frozen-in-time-vierge-1.png");
+
+    let font_path = cfg
+        .font
+        .as_deref()
+        .unwrap_or("data/sheet_gen/assets/DejaVuSans.ttf");
+
+    let coords_path = cfg
+        .coords
+        .as_deref()
+        .unwrap_or("data/sheet_gen/fr/frozen-in-time/char_sheet_coord.txt");
+
+    let output_png = cfg
+        .output_png
+        .as_deref()
+        .unwrap_or("output/fiche_personnage.png");
+
     // Charge la fiche PNG vierge
-    //let mut img = image::open("./data/sheet_gen/fr/DCC_Fiche_Niv0.png")
-    let mut img = image::open("data/sheet_gen/fr/frozen-in-time/fiche-frozen-in-time-vierge-1.png")
-        .expect("DCC_Fiche_Niv0.png manquante")
+    let mut img = image::open(template_png)
+        .expect("Template PNG manquant")
         .to_rgba8();
 
     // Charge la police
-    let font_data =
-        std::fs::read("./data/sheet_gen/assets/DejaVuSans.ttf").expect("Police manquante");
+    let font_data = std::fs::read(font_path).expect("Police manquante");
     let font = Font::try_from_vec(font_data).unwrap();
     let scale = Scale { x: 40.0, y: 40.0 }; // 40 pour fr/hyper-cube-of-myt
     let scale_big = Scale { x: 54.0, y: 54.0 }; // 40 pour fr/hyper-cube-of-myt
 
     // Charge le personnage
-    let file = File::open("output/personnage.json").unwrap();
+    let file = File::open(input_json)
+        .unwrap_or_else(|_| panic!("Fichier JSON d'entrée introuvable : {}", input_json));
     let reader = BufReader::new(file);
     let character: Character = serde_json::from_reader(reader).unwrap();
     println!("{:?}", character);
 
     // Charge les coordonnées
-    let coords = load_coordinates("./data/sheet_gen/fr/frozen-in-time/char_sheet_coord.txt");
+    let coords = load_coordinates(coords_path);
     if coords.is_empty() {
         panic!("Le fichier char_sheet_coord.txt est vide ou manquant");
     }
@@ -344,5 +403,5 @@ fn main() {
     }
 
     // Sauvegarde la fiche remplie
-    img.save("output/fiche_personnage.png").unwrap();
+    img.save(output_png).unwrap();
 }
